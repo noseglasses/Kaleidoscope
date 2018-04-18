@@ -30,21 +30,43 @@ Kaleidoscope_::setup(void) {
 }
 
 void
-Kaleidoscope_::loop(void) {
+Kaleidoscope_::processKeyEvents(void) {
   KeyboardHardware.scanMatrix();
+}
+
+void
+Kaleidoscope_::preClearLoopHooks(void) {
 
   for (byte i = 0; loopHooks[i] != NULL && i < HOOK_MAX; i++) {
     loopHook hook = loopHooks[i];
     (*hook)(false);
   }
+}
 
-  kaleidoscope::hid::sendKeyboardReport();
-  kaleidoscope::hid::releaseAllKeys();
+void
+Kaleidoscope_::postClearLoopHooks(void) {
 
   for (byte i = 0; loopHooks[i] != NULL && i < HOOK_MAX; i++) {
     loopHook hook = loopHooks[i];
     (*hook)(true);
   }
+}
+
+void
+Kaleidoscope_::processLoopHooks(void) {
+
+  preClearLoopHooks();
+
+  kaleidoscope::hid::sendKeyboardReport();
+  kaleidoscope::hid::releaseAllKeys();
+
+  postClearLoopHooks();
+}
+
+void
+Kaleidoscope_::loop(void) {
+  processKeyEvents();
+  processLoopHooks();
 }
 
 void

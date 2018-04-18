@@ -101,6 +101,11 @@ class Kaleidoscope_ {
   void setup(void);
   void loop(void);
 
+  void preClearLoopHooks(void);
+  void postClearLoopHooks(void);
+  void processKeyEvents(void);
+  void processLoopHooks(void);
+
   // ---- Kaleidoscope.use() ----
 
   // First, we have the zero-argument version, which will satisfy the tail case.

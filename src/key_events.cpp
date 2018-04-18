@@ -30,13 +30,22 @@ static bool handleKeyswitchEventDefault(Key mappedKey, byte row, byte col, uint8
   //for every newly pressed button, figure out what logical key it is and send a key down event
   // for every newly released button, figure out what logical key it is and send a key up event
 
+  bool reportRequired = false;
+
   if (mappedKey.flags & SYNTHETIC) {
     handleSyntheticKeyswitchEvent(mappedKey, keyState);
   } else if (keyIsPressed(keyState)) {
     kaleidoscope::hid::pressKey(mappedKey);
-  } else if (keyToggledOff(keyState) && (keyState & INJECTED)) {
+    reportRequired = true;
+  } else if (keyToggledOff(keyState)/* && (keyState & INJECTED)*/) {
     kaleidoscope::hid::releaseKey(mappedKey);
+    reportRequired = true;
   }
+
+  if (reportRequired) {
+    kaleidoscope::hid::sendKeyboardReport();
+  }
+
   return true;
 }
 
