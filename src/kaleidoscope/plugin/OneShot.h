@@ -99,8 +99,6 @@ class OneShot : public kaleidoscope::Plugin {
   static uint8_t positions_[16];
   static bool use_new_stickies_;
 
-  static void positionToCoords(uint8_t pos, byte *row, byte *col);
-
   static void injectNormalKey(uint8_t idx, uint8_t key_state);
   static void activateOneShot(uint8_t idx);
   static void cancelOneShot(uint8_t idx);
